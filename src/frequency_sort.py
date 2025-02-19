@@ -18,8 +18,11 @@ def sort_by_frequency(numbers):
     # Count the frequency of each number
     freq_count = Counter(numbers)
     
-    # Sort the unique numbers by their frequency
-    sorted_unique = sorted(set(numbers), key=lambda x: freq_count[x])
+    # Create a mapping of order of first occurrence
+    first_occurrence = {num: numbers.index(num) for num in freq_count}
+    
+    # Sort the unique numbers by their frequency and first occurrence
+    sorted_unique = sorted(set(numbers), key=lambda x: (freq_count[x], first_occurrence[x]))
     
     # Create the final sorted list maintaining the order of sorted_unique
     result = []
