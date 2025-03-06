@@ -1,6 +1,7 @@
 import os
 import time
 import random
+import hashlib
 
 def generate_uuid():
     """
@@ -9,12 +10,19 @@ def generate_uuid():
     Returns:
         str: A randomly generated UUID in standard 8-4-4-4-12 format.
     """
-    # Get current timestamp and process ID for additional randomness
+    # Use multiple sources of entropy
     timestamp = int(time.time() * 1000)
     pid = os.getpid()
+    random_seed = random.SystemRandom().getrandbits(64)
     
-    # Use a combination of random bytes and timestamp for entropy
-    random.seed(timestamp + pid)
+    # Create a seed that combines multiple entropy sources
+    combined_seed = f"{timestamp}-{pid}-{random_seed}-{random.SystemRandom().getrandbits(64)}"
+    
+    # Use hashlib to create a consistent but hard to predict seed
+    hash_seed = hashlib.sha256(combined_seed.encode()).digest()
+    
+    # Use the hash to seed random number generation
+    random.seed(hash_seed)
     
     # Generate 16 random bytes (128 bits)
     uuid_bytes = [random.randint(0, 255) for _ in range(16)]
