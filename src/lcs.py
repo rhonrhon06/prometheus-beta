@@ -24,6 +24,14 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
     if not str1 or not str2:
         return ""
     
+    # Strict case comparison first
+    if str1 == str2:
+        return str1
+    
+    # If cases are different, return empty string
+    if str1.lower() == str2.lower():
+        return ""
+    
     # Create dynamic programming matrix
     m, n = len(str1), len(str2)
     # Initialize matrix with zeros
