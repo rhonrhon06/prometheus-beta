@@ -42,4 +42,4 @@ def test_different_length_strings():
 
 def test_partial_suffix():
     """Test finding a partial common suffix."""
-    assert find_longest_common_suffix(["runner", "bummer", "plumber"]) == "mer"
+    assert find_longest_common_suffix(["runner", "bummer", "plumber"]) == "er"
