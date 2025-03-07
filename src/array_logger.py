@@ -19,17 +19,14 @@ def log_array_as_table(arr):
     if not arr:
         return "Empty table"
     
-    # Determine column width based on longest string representation
-    col_width = max(len(str(item)) for item in arr) + 2
-    
     # Create table header and separator
-    header = f"| Index |   Value   |"
-    separator = f"+{'-' * 6}+{'-' * 10}+"
+    header = f"| Index |  Value  |"
+    separator = f"+{'-' * 6}+{'-' * 8}+"
     
     # Build table rows
     rows = [separator, header, separator]
     for index, value in enumerate(arr):
-        row = f"| {index:<5} |   {str(value):<7}  |"
+        row = f"| {index:<5} |  {value:^5}  |"
         rows.append(row)
     
     # Add bottom separator
