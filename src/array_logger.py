@@ -26,7 +26,7 @@ def log_array_as_table(arr):
     # Build table rows
     rows = [separator, header, separator]
     for index, value in enumerate(arr):
-        row = f"| {index:<5} |   {str(value):^3}   |"
+        row = f"| {index:<5} |   {value:^3}     |"
         rows.append(row)
     
     # Add bottom separator
