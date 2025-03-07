@@ -23,13 +23,13 @@ def log_array_as_table(arr):
     col_width = max(len(str(item)) for item in arr) + 2
     
     # Create table header and separator
-    header = f"| Index |  Value  |"
-    separator = f"+{'-' * 6}+{'-' * 8}+"
+    header = f"| Index |   Value   |"
+    separator = f"+{'-' * 6}+{'-' * 10}+"
     
     # Build table rows
     rows = [separator, header, separator]
     for index, value in enumerate(arr):
-        row = f"| {index:<5} |  {str(value):^5}  |"
+        row = f"| {index:<5} |   {str(value):<7}  |"
         rows.append(row)
     
     # Add bottom separator
