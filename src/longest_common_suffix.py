@@ -41,11 +41,9 @@ def find_longest_common_suffix(strings):
         suffix = strings[0][-i:]
         
         # Check if this suffix is common to all strings
-        if all(s.endswith(suffix) for s in strings):
-            continue
-        
-        # If not common, return the previous (longer) suffix
-        return strings[0][-i+1:] if i > 1 else ''
+        if not all(s.endswith(suffix) for s in strings):
+            # If not common, return the previous (longer) suffix
+            return strings[0][-i+1:] if i > 1 else ''
     
     # If loop completes, return the shortest possible common suffix
     return strings[0][:min_length]
