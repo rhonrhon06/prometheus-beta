@@ -25,11 +25,12 @@ def test_partial_match():
     assert longest_common_subsequence("ABCDAF", "ACBCF") == "ABCF"
 
 def test_case_sensitivity():
-    """Test case sensitivity"""
-    # Completely different case should return empty string
-    assert longest_common_subsequence("Hello", "HELLO") == ""
+    """Test case sensitivity with nuanced scenarios"""
+    # Different cases produce no match
     assert longest_common_subsequence("Hello", "hello") == ""
-    # Strictly case-sensitive match
+    assert longest_common_subsequence("HELLO", "hello") == ""
+    assert longest_common_subsequence("hELLO", "HELLO") == ""
+    # Exact case match
     assert longest_common_subsequence("HELLO", "HELLO") == "HELLO"
 
 def test_type_error():
