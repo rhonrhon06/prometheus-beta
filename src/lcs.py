@@ -4,6 +4,7 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
     
     A subsequence is a sequence that can be derived from another sequence 
     by deleting some or no elements without changing the order of the remaining elements.
+    Note: Comparison is case-sensitive.
     
     Args:
         str1 (str): First input string
@@ -31,6 +32,7 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
     # Build the LCS matrix
     for i in range(1, m + 1):
         for j in range(1, n + 1):
+            # Strict case-sensitive matching
             if str1[i-1] == str2[j-1]:
                 dp[i][j] = dp[i-1][j-1] + 1
             else:
