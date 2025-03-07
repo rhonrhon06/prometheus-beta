@@ -24,9 +24,12 @@ def find_rightmost_set_bit(n: int) -> int:
     if not isinstance(n, int):
         raise TypeError("Input must be an integer")
     
-    # Handle non-positive numbers
-    if n <= 0:
+    # Handle non-positive and zero numbers
+    if n == 0:
         return 0
+    
+    # Take absolute value to handle negative numbers
+    n = abs(n)
     
     # Use bitwise operations to find the rightmost set bit
     # We use the property that n & -n isolates the rightmost set bit
