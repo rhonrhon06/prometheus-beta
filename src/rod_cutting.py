@@ -19,7 +19,8 @@ def rod_cutting(prices, n):
         raise ValueError("Rod length must be non-negative")
     
     # Extend prices list to handle different rod lengths
-    prices = [0] + prices
+    # If rod length exceeds available prices, repeat the last price
+    extended_prices = [0] + prices + [prices[-1]] * (n - len(prices) + 1)
     
     # Initialize dynamic programming table
     max_value = [0] * (n + 1)
@@ -27,8 +28,8 @@ def rod_cutting(prices, n):
     # Compute maximum value for each rod length
     for i in range(1, n + 1):
         max_curr = float('-inf')
-        for j in range(1, min(i, len(prices)) + 1):
-            max_curr = max(max_curr, prices[j] + max_value[i - j])
+        for j in range(1, min(i, len(extended_prices)) + 1):
+            max_curr = max(max_curr, extended_prices[j] + max_value[i - j])
         max_value[i] = max_curr
     
     return max_value[n]
