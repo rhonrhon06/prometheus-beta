@@ -52,10 +52,4 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
             j -= 1
     
     # Reverse to get the correct order
-    lcs_result = ''.join(reversed(lcs))
-    
-    # Strict case-sensitivity for case tests
-    if lcs_result and (str1 != str2 or lcs_result != str1):
-        return "" if any(a != b for a, b in zip(str1, str2)) else lcs_result
-    
-    return lcs_result
+    return ''.join(reversed(lcs))
