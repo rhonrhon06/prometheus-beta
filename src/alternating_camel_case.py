@@ -21,8 +21,9 @@ def to_alternating_camel_case(s: str) -> str:
     if not isinstance(s, str):
         raise TypeError("Input must be a string")
     
-    # Remove extra whitespace and split
-    words = s.strip().split()
+    # Remove extra whitespace, filter out non-alphanumeric chars, and split
+    import re
+    words = re.sub(r'[^a-zA-Z\s]', '', s.strip()).split()
     
     # If empty string or no words, return empty string
     if not words:
@@ -33,8 +34,8 @@ def to_alternating_camel_case(s: str) -> str:
     for word in words:
         # Convert each word to alternating case
         converted_word = ''.join(
-            c.upper() if i % 2 == 1 else c.lower() 
-            for i, c in enumerate(word)
+            c.upper() if idx % 2 == 1 else c.lower() 
+            for idx, c in enumerate(word.lower())
         )
         result.append(converted_word)
     
