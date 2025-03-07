@@ -19,14 +19,14 @@ def log_array_as_table(arr):
     if not arr:
         return "Empty table"
     
-    # Create table header and separator
-    header = f"| Index |  Value  |"
-    separator = f"+{'-' * 6}+{'-' * 8}+"
+    # Create table header and separator 
+    header = f"| Index |   Value   |"
+    separator = f"+{'-' * 6}+{'-' * 10}+"
     
     # Build table rows
     rows = [separator, header, separator]
     for index, value in enumerate(arr):
-        row = f"| {index:<5} |   {value:^3}   |"
+        row = f"| {index:<5} |    {value:<6}  |"
         rows.append(row)
     
     # Add bottom separator
