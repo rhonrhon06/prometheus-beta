@@ -26,11 +26,11 @@ def longest_subsequence_with_sum(arr, target):
         
         # Check if we have a prefix sum that makes the current subsequence match target
         if current_sum - target in prefix_sums:
-            # Update max length
-            max_length = max(max_length, end - prefix_sums[current_sum - target])
+            # Update max length, ensuring local max
+            candidate_length = end - prefix_sums[current_sum - target]
+            max_length = max(max_length, candidate_length)
         
-        # Store the first occurrence of each prefix sum
-        if current_sum not in prefix_sums:
-            prefix_sums[current_sum] = end
+        # Store the leftmost occurrence of each prefix sum
+        prefix_sums.setdefault(current_sum, end)
     
     return max_length
