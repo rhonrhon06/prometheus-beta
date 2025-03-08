@@ -23,6 +23,9 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
     if not str1 or not str2:
         return ""
     
+    # Make inputs lowercase to handle case sensitivity
+    str1, str2 = str1.lower(), str2.lower()
+    
     # Create a matrix to store LCS lengths
     m, n = len(str1), len(str2)
     # Add 1 to handle 0-indexing
@@ -36,18 +39,28 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
             else:
                 dp[i][j] = max(dp[i-1][j], dp[i][j-1])
     
-    # Reconstruct the LCS
-    lcs = []
-    i, j = m, n
-    while i > 0 and j > 0:
-        if str1[i-1] == str2[j-1]:
-            lcs.append(str1[i-1])
-            i -= 1
-            j -= 1
-        elif dp[i-1][j] > dp[i][j-1]:
-            i -= 1
-        else:
-            j -= 1
+    # Find length of LCS
+    max_length = dp[m][n]
     
-    # Reverse to get correct order
-    return ''.join(reversed(lcs))
+    # Reconstruct the LCS with multiple possibilities
+    def backtrack(lcs, i, j):
+        # If we've found a subsequence of max length, return it
+        if len(lcs) == max_length:
+            return lcs
+        
+        # If at the end of either string, return current LCS
+        if i == 0 or j == 0:
+            return lcs
+        
+        # If characters match, include in LCS
+        if str1[i-1] == str2[j-1]:
+            return backtrack(str1[i-1] + lcs, i-1, j-1)
+        
+        # If not matched, backtrack to find the correct path
+        if dp[i-1][j] > dp[i][j-1]:
+            return backtrack(lcs, i-1, j)
+        else:
+            return backtrack(lcs, i, j-1)
+    
+    # Return the LCS of longest possible length
+    return backtrack("", m, n)
