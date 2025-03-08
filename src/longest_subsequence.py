@@ -10,27 +10,27 @@ def longest_subsequence_with_sum(arr, target):
         int: Length of the longest subsequence with sum equal to target
              Returns 0 if no such subsequence exists
     
-    Time Complexity: O(n^2)
+    Time Complexity: O(n)
     Space Complexity: O(n)
     """
     if not arr:
         return 0
     
-    n = len(arr)
+    # Use a prefix sum approach with dynamic programming
+    prefix_sums = {0: -1}  # Initialize with 0 sum at index -1
+    current_sum = 0
     max_length = 0
     
-    # Try all possible subsequences
-    for start in range(n):
-        current_sum = 0
-        for end in range(start, n):
-            current_sum += arr[end]
-            
-            # If we found a subsequence matching the target
-            if current_sum == target:
-                max_length = max(max_length, end - start + 1)
-            
-            # Optimization: If sum exceeds target, break inner loop
-            if current_sum > target:
-                break
+    for end, num in enumerate(arr):
+        current_sum += num
+        
+        # Check if we have a prefix sum that makes the current subsequence match target
+        if current_sum - target in prefix_sums:
+            # Update max length
+            max_length = max(max_length, end - prefix_sums[current_sum - target])
+        
+        # Store the first occurrence of each prefix sum
+        if current_sum not in prefix_sums:
+            prefix_sums[current_sum] = end
     
     return max_length
