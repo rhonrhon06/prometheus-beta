@@ -19,20 +19,25 @@ def find_missing_numbers(arr):
     is_ascending = arr[0] <= arr[-1]
     
     # Sort the array in ascending order for consistent processing
-    if not is_ascending:
-        arr = sorted(arr, reverse=True)
+    sorted_arr = sorted(arr) if not is_ascending else arr
     
     # Find the range of numbers
-    min_val = arr[0]
-    max_val = arr[-1]
+    min_val = sorted_arr[0]
+    max_val = sorted_arr[-1]
     
     # Create a set of the input array for efficient lookup
-    num_set = set(arr)
+    num_set = set(sorted_arr)
     
     # Find missing numbers
     missing_numbers = [
-        num for num in range(min_val, max_val + 1) 
+        num for num in range(1, max_val + 1) 
         if num not in num_set
+    ]
+    
+    # Truncate to numbers from min_val to max_val
+    missing_numbers = [
+        num for num in missing_numbers 
+        if min_val <= num <= max_val
     ]
     
     # If originally descending, return in descending order
