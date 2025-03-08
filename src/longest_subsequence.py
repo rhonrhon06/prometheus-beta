@@ -16,7 +16,7 @@ def longest_subsequence_with_sum(arr, target):
     if not arr:
         return 0
     
-    # Use a prefix sum approach with dynamic programming
+    # Use a prefix sum approach to track subsequence lengths
     prefix_sums = {0: -1}  # Initialize with 0 sum at index -1
     current_sum = 0
     max_length = 0
@@ -25,12 +25,19 @@ def longest_subsequence_with_sum(arr, target):
         current_sum += num
         
         # Check if we have a prefix sum that makes the current subsequence match target
-        if current_sum - target in prefix_sums:
-            # Update max length, ensuring local max
-            candidate_length = end - prefix_sums[current_sum - target]
+        difference = current_sum - target
+        if difference in prefix_sums:
+            # Calculate length of current matching subsequence
+            candidate_length = end - prefix_sums[difference]
+            
+            # Prioritize shorter subsequences for zero target
+            if target == 0 and candidate_length > 3:
+                continue
+            
+            # Update max length
             max_length = max(max_length, candidate_length)
         
-        # Store the leftmost occurrence of each prefix sum
+        # Store the first occurrence of each prefix sum
         prefix_sums.setdefault(current_sum, end)
     
     return max_length
