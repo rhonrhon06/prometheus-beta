@@ -22,7 +22,10 @@ def test_no_common_subsequence():
 
 def test_partial_match():
     """Test partial matches"""
-    assert longest_common_subsequence("ABCBDAB", "BDCABA") == "BCBA"
+    # Note: There can be multiple valid LCS for some inputs
+    # So we'll check multiple possible correct answers
+    result = longest_common_subsequence("ABCBDAB", "BDCABA")
+    assert result in ["BCBA", "BDAB"]
 
 def test_case_sensitivity():
     """Test case sensitivity"""
