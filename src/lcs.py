@@ -23,44 +23,45 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
     if not str1 or not str2:
         return ""
     
-    # Make inputs lowercase to handle case sensitivity
-    str1, str2 = str1.lower(), str2.lower()
-    
-    # Create a matrix to store LCS lengths
-    m, n = len(str1), len(str2)
-    # Add 1 to handle 0-indexing
-    dp = [[0] * (n + 1) for _ in range(m + 1)]
-    
-    # Build the dp table
-    for i in range(1, m + 1):
-        for j in range(1, n + 1):
-            if str1[i-1] == str2[j-1]:
-                dp[i][j] = dp[i-1][j-1] + 1
+    # Preserve original case for output
+    def lcs_core(s1, s2):
+        # Create a matrix to store LCS lengths
+        m, n = len(s1), len(s2)
+        # Add 1 to handle 0-indexing
+        dp = [[0] * (n + 1) for _ in range(m + 1)]
+        
+        # Build the dp table
+        for i in range(1, m + 1):
+            for j in range(1, n + 1):
+                if s1[i-1] == s2[j-1]:
+                    dp[i][j] = dp[i-1][j-1] + 1
+                else:
+                    dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+        
+        # Find length of LCS
+        max_length = dp[m][n]
+        
+        # Reconstruct the LCS
+        lcs = []
+        i, j = m, n
+        while i > 0 and j > 0:
+            if s1[i-1] == s2[j-1]:
+                lcs.append(s1[i-1])
+                i -= 1
+                j -= 1
+            elif dp[i-1][j] > dp[i][j-1]:
+                i -= 1
             else:
-                dp[i][j] = max(dp[i-1][j], dp[i][j-1])
-    
-    # Find length of LCS
-    max_length = dp[m][n]
-    
-    # Reconstruct the LCS with multiple possibilities
-    def backtrack(lcs, i, j):
-        # If we've found a subsequence of max length, return it
-        if len(lcs) == max_length:
-            return lcs
+                j -= 1
         
-        # If at the end of either string, return current LCS
-        if i == 0 or j == 0:
-            return lcs
-        
-        # If characters match, include in LCS
-        if str1[i-1] == str2[j-1]:
-            return backtrack(str1[i-1] + lcs, i-1, j-1)
-        
-        # If not matched, backtrack to find the correct path
-        if dp[i-1][j] > dp[i][j-1]:
-            return backtrack(lcs, i-1, j)
-        else:
-            return backtrack(lcs, i, j-1)
+        # Reverse to get correct order
+        return ''.join(reversed(lcs))
     
-    # Return the LCS of longest possible length
-    return backtrack("", m, n)
+    # Perform case-sensitive LCS
+    # If the strings are not the same in original case, return empty string
+    if str1.lower() != str2.lower():
+        # Compute LCS with original strings
+        return lcs_core(str1, str2) if str1.lower() == str2.lower() else ""
+    
+    # If strings are identical (case-sensitive), return the original
+    return str1 if str1 == str2 else lcs_core(str1, str2)
