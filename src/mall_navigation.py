@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 import heapq
 
 class MallGraph:
@@ -50,7 +50,7 @@ class MallGraph:
         self.graph[store1][store2] = distance
         self.graph[store2][store1] = distance  # Assume undirected graph
     
-    def find_shortest_path(self, start: str, end: str) -> Optional[List[str]]:
+    def find_shortest_path(self, start: str, end: str) -> Optional[Tuple[List[str], float]]:
         """
         Find the shortest path between two stores using Dijkstra's algorithm.
         
@@ -59,7 +59,7 @@ class MallGraph:
             end (str): Destination store name
         
         Returns:
-            Optional[List[str]]: List of stores in the shortest path, or None if no path exists
+            Optional[Tuple[List[str], float]]: Tuple of (path, total_distance), or None if no path exists
         
         Raises:
             ValueError: If start or end store does not exist
@@ -70,14 +70,16 @@ class MallGraph:
         if end not in self.graph:
             raise ValueError(f"End store {end} does not exist in the mall map")
         
-        # If start and end are the same, return a list with just that store
+        # If start and end are the same, return a list with just that store and 0 distance
         if start == end:
-            return [start]
+            return [start], 0.0
         
         # Initialize distances and predecessors
         distances = {store: float('inf') for store in self.graph}
         distances[start] = 0
         predecessors = {store: None for store in self.graph}
+        path_distances = {store: float('inf') for store in self.graph}
+        path_distances[start] = 0
         
         # Priority queue to track minimum distances
         pq = [(0, start)]
@@ -88,10 +90,14 @@ class MallGraph:
             # If we've reached the destination, reconstruct and return the path
             if current_store == end:
                 path = []
+                total_distance = 0
                 while current_store:
                     path.append(current_store)
+                    if len(path) > 1:
+                        # Add distance between current store and previous store
+                        total_distance += self.graph[path[-1]][path[-2]]
                     current_store = predecessors[current_store]
-                return list(reversed(path))
+                return list(reversed(path)), total_distance
             
             # If we've found a longer path, skip
             if current_distance > distances[current_store]:
@@ -104,6 +110,7 @@ class MallGraph:
                 # If we've found a shorter path, update
                 if distance < distances[neighbor]:
                     distances[neighbor] = distance
+                    path_distances[neighbor] = distance
                     predecessors[neighbor] = current_store
                     heapq.heappush(pq, (distance, neighbor))
         
