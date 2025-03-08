@@ -8,7 +8,7 @@ def test_basic_substring_reversal():
 
 def test_partial_substring_reversal():
     """Test reversing a portion of the string"""
-    assert reverse_substring("python programming", 7, 17) == "python gnimmargorp"
+    assert reverse_substring("python programming", 7, 17) == "python nimmargorpg"
 
 def test_single_character_substring():
     """Test reversing a single character substring"""
