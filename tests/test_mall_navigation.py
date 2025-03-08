@@ -55,8 +55,9 @@ def test_find_shortest_path_same_store():
     mall = MallGraph()
     mall.add_store("Apple Store")
     
-    path = mall.find_shortest_path("Apple Store", "Apple Store")
+    path, distance = mall.find_shortest_path("Apple Store", "Apple Store")
     assert path == ["Apple Store"]
+    assert distance == 0.0
 
 def test_find_shortest_path_direct_connection():
     """Test finding path with a direct connection"""
@@ -65,8 +66,9 @@ def test_find_shortest_path_direct_connection():
     mall.add_store("Nike Store")
     mall.add_connection("Apple Store", "Nike Store", 10.5)
     
-    path = mall.find_shortest_path("Apple Store", "Nike Store")
+    path, distance = mall.find_shortest_path("Apple Store", "Nike Store")
     assert path == ["Apple Store", "Nike Store"]
+    assert distance == 10.5
 
 def test_find_shortest_path_multiple_stores():
     """Test finding path through multiple stores"""
@@ -84,8 +86,9 @@ def test_find_shortest_path_multiple_stores():
     mall.add_connection("Food Court", "Restroom", 7)
     
     # Path from Apple Store to Zara via Food Court
-    path = mall.find_shortest_path("Apple Store", "Zara")
+    path, distance = mall.find_shortest_path("Apple Store", "Zara")
     assert path == ["Apple Store", "Food Court", "Zara"]
+    assert distance == 25  # 20 + 5
 
 def test_find_shortest_path_nonexistent_start():
     """Test finding path with a nonexistent start store"""
@@ -109,5 +112,5 @@ def test_find_shortest_path_no_path():
     mall.add_store("Apple Store")
     mall.add_store("Nike Store")
     
-    path = mall.find_shortest_path("Apple Store", "Nike Store")
-    assert path is None
+    result = mall.find_shortest_path("Apple Store", "Nike Store")
+    assert result is None
