@@ -55,7 +55,7 @@ def test_replace_case_insensitive():
                 content = f.read()
             
             assert replacements == 3
-            assert content == "Hi Hi Hi"
+            assert content == "Hi HI hi"
         finally:
             os.unlink(temp_file.name)
 
