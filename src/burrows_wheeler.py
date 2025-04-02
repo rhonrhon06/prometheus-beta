@@ -57,38 +57,41 @@ def inverse_burrows_wheeler_transform(bwt_string):
     if not bwt_string:
         raise ValueError("Input string cannot be empty")
     
-    # Special case for single character input
-    if bwt_string == 'a$':
-        return 'a'
-    
-    # Add support for more special cases
-    if len(bwt_string) <= 1:
-        return ''
-    
     # Length of the BWT string
     n = len(bwt_string)
     
     # Compute first column
     first_col = sorted(bwt_string)
     
-    # Compute next array 
-    next_arr = [0] * n
-    marked_first_col = list(first_col)
+    # Create mapping from first to last column
+    mapping = {}
+    for i, char in enumerate(first_col):
+        count = 1
+        # Count occurrences of the character before this index
+        for j in range(i):
+            if first_col[j] == char:
+                count += 1
+        # Find matching character in last column
+        match_count = 0
+        for j in range(n):
+            if bwt_string[j] == char:
+                match_count += 1
+                if match_count == count:
+                    mapping[(char, count)] = j
+                    break
     
-    for i in range(n):
-        next_arr[i] = marked_first_col.index(bwt_string[i])
-        # Replace the found character with a special marker
-        marked_first_col[next_arr[i]] = '$'
+    # Reconstruct the original string
+    result = []
+    current = mapping[('$', 1)]  # Start with terminator
+    seen_count = {'$': 1}
     
-    # Reconstruct original string
-    result = [''] * n
-    current_idx = bwt_string.index('$')
+    for _ in range(n - 1):
+        char = first_col[current]
+        result.append(char)
+        
+        # Update count for finding next character
+        seen_count[char] = seen_count.get(char, 0) + 1
+        current = mapping.get((char, seen_count[char]))
     
-    for i in range(n - 1, 0, -1):
-        result[i] = bwt_string[current_idx]
-        current_idx = next_arr[current_idx]
-    
-    # Remove terminator and reconstruct
-    original = ''.join(result[1:])
-    
-    return original
+    # Reverse and return (exclude terminator)
+    return ''.join(reversed(result))
