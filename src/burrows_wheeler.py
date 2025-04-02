@@ -57,27 +57,32 @@ def inverse_burrows_wheeler_transform(bwt_string):
     if not bwt_string:
         raise ValueError("Input string cannot be empty")
     
-    # Compute first column by sorting
-    first_column = sorted(bwt_string)
-    
-    # Initialize reconstruction
+    # Length of the BWT string
     n = len(bwt_string)
-    next_char = [0] * n
     
-    # Create mapping to reconstruct the original string
+    # Create first and last column
+    first_col = sorted(bwt_string)
+    
+    # Track the index of the last $ terminator
+    terminator_index = bwt_string.index('$')
+    
+    # Create links between first and last columns 
+    # that will help reconstruct the original string
+    links = [0] * n
     for i in range(n):
-        next_char[i] = first_column.index(bwt_string[i])
-        first_column[next_char[i]] = ''
+        links[i] = first_col.index(bwt_string[i])
+        # To handle repeated characters, replace with '$' after use
+        first_col[links[i]] = '$'
     
     # Reconstruct the original string
     result = [''] * n
-    j = 0
-    for i in range(n-1, -1, -1):
-        result[i] = bwt_string[j]
-        j = next_char[j]
+    current = terminator_index
     
-    # Remove terminator and join
-    original = ''.join(result)
-    original = original.split('$')[0]
+    for i in range(n-1, -1, -1):
+        result[i] = bwt_string[current]
+        current = links[current]
+    
+    # Join and remove terminator
+    original = ''.join(result[1:])
     
     return original
