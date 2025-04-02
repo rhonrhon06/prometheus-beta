@@ -42,9 +42,21 @@ def replace_string_in_file(file_path, old_string, new_string, case_sensitive=Tru
         replacements = content.count(old_string)
         modified_content = content.replace(old_string, new_string)
     else:
-        # Use re.sub for case-insensitive replacement
+        # Use custom case-preserving replacement for case-insensitive mode
+        def case_preserve_replace(match):
+            """Replace string while preserving original case."""
+            matched = match.group(0)
+            if matched.islower():
+                return new_string.lower()
+            elif matched.istitle():
+                return new_string.title()
+            elif matched.isupper():
+                return new_string.upper()
+            return new_string
+        
         pattern = re.compile(re.escape(old_string), re.IGNORECASE)
-        modified_content = pattern.sub(new_string, content)
+        modified_content = pattern.sub(case_preserve_replace, content)
+        
         # Count replacements
         replacements = len(pattern.findall(content))
     
