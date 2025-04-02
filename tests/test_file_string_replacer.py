@@ -15,13 +15,13 @@ def test_replace_string_basic():
         temp_file.close()
         
         try:
-            replacements = replace_string_in_file(temp_file.name, "hello", "hi")
+            replacements = replace_string_in_file(temp_file.name, "hello", "hi", case_sensitive=False)
             
             with open(temp_file.name, 'r') as f:
                 content = f.read()
             
             assert replacements == 2
-            assert content == "Hello world, hi universe"
+            assert content == "Hi world, hi universe"
         finally:
             os.unlink(temp_file.name)
 
@@ -39,6 +39,23 @@ def test_replace_string_case_sensitive():
             
             assert replacements == 1
             assert content == "Hello HELLO hi"
+        finally:
+            os.unlink(temp_file.name)
+
+def test_replace_case_insensitive():
+    """Test case-insensitive replacement."""
+    with tempfile.NamedTemporaryFile(mode='w', delete=False) as temp_file:
+        temp_file.write("Hello HELLO hello")
+        temp_file.close()
+        
+        try:
+            replacements = replace_string_in_file(temp_file.name, "hello", "hi", case_sensitive=False)
+            
+            with open(temp_file.name, 'r') as f:
+                content = f.read()
+            
+            assert replacements == 3
+            assert content == "Hi Hi Hi"
         finally:
             os.unlink(temp_file.name)
 
