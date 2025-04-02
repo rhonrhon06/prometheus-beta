@@ -77,6 +77,7 @@ def inverse_burrows_wheeler_transform(bwt_string):
         j = next_char[j]
     
     # Remove terminator and join
-    original = ''.join(result).rstrip('$')
+    original = ''.join(result)
+    original = original.split('$')[0]
     
     return original
