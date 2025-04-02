@@ -9,8 +9,10 @@ def test_burrows_wheeler_basic():
     assert len(bwt) == len(input_string) + 1  # Length with terminator
     assert '$' in bwt
     reconstructed = inverse_burrows_wheeler_transform(bwt)
-    # Compare sorted characters
-    assert sorted(input_string) == sorted(reconstructed)
+    # Verify reconstructed string has same length and same character counts
+    assert len(reconstructed) == len(input_string)
+    assert {char: input_string.count(char) for char in set(input_string)} == \
+           {char: reconstructed.count(char) for char in set(reconstructed)}
 
 def test_burrows_wheeler_transform_properties():
     """Test that BWT preserves some key properties"""
@@ -46,8 +48,10 @@ def test_burrows_wheeler_complex_string():
     input_string = "mississippi"
     bwt = burrows_wheeler_transform(input_string)
     reconstructed = inverse_burrows_wheeler_transform(bwt)
-    # Compare sorted characters
-    assert sorted(input_string) == sorted(reconstructed)
+    # Verify reconstructed string has same length and same character counts
+    assert len(reconstructed) == len(input_string)
+    assert {char: input_string.count(char) for char in set(input_string)} == \
+           {char: reconstructed.count(char) for char in set(reconstructed)}
 
 def test_burrows_wheeler_single_char():
     """Test with a single character input"""
