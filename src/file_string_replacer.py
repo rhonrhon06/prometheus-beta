@@ -1,8 +1,9 @@
 """
 Module for replacing strings in files.
 """
+import re
 
-def replace_string_in_file(file_path, old_string, new_string):
+def replace_string_in_file(file_path, old_string, new_string, case_sensitive=True):
     """
     Replace all occurrences of a specific string in a file.
 
@@ -10,6 +11,8 @@ def replace_string_in_file(file_path, old_string, new_string):
         file_path (str): Path to the file to be modified.
         old_string (str): The string to be replaced.
         new_string (str): The string to replace with.
+        case_sensitive (bool, optional): Whether replacement should be case-sensitive. 
+                                         Defaults to True.
 
     Returns:
         int: Number of replacements made.
@@ -34,11 +37,16 @@ def replace_string_in_file(file_path, old_string, new_string):
     except FileNotFoundError:
         raise FileNotFoundError(f"File not found: {file_path}")
     
-    # Count the number of replacements
-    replacements = content.count(old_string)
-    
-    # Replace the string
-    modified_content = content.replace(old_string, new_string)
+    # Decide replacement method based on case sensitivity
+    if case_sensitive:
+        replacements = content.count(old_string)
+        modified_content = content.replace(old_string, new_string)
+    else:
+        # Use re.sub for case-insensitive replacement
+        pattern = re.compile(re.escape(old_string), re.IGNORECASE)
+        modified_content = pattern.sub(new_string, content)
+        # Count replacements
+        replacements = len(pattern.findall(content))
     
     # Write back to the file
     with open(file_path, 'w', encoding='utf-8') as file:
